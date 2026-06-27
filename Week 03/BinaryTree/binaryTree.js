@@ -30,6 +30,17 @@ class BinaryTree {
       } else {
         queue.push(current.left);
       }
+      // Check the left child: If the left child of the currentNode is null, this means the spot is
+      //                       available for the new node. So, we insert the new node there.
+
+      // Insert the node: After inserting the new node, there's no need to check any further nodes
+      //                  or make additional changes because the insertion is complete.
+      //                  At this point, the currentNode has its left child set to the new node,
+      //                  so the task is done.
+
+      // Return immediately: We exit the insert() method right after the insertion because our job is
+      // done.We don’t need to continue traversing the tree since we’ve inserted the node in the
+      // correct position.
 
       if (current.right === null) {
         current.right = newNode;
@@ -39,6 +50,7 @@ class BinaryTree {
       }
     }
   }
+
   recursiveInsert(node, value) {
     if (!node) {
       return new Node(value);
@@ -114,10 +126,19 @@ class BinaryTree {
 
     return this.search(value, node.left) || this.search(value, node.right);
   }
+  isPowerOfTwo(n) {
+    if (n <= 0) return false; // Powers of 2 are positive numbers
+
+    for (let i = 0; 2 ** i <= n; i++) {
+      if (2 ** i === n) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // Given an integer array nums where the elements are sorted in ascending order,
   // convert it to a height-balanced binary search tree.
-
 }
 const tree = new BinaryTree();
 tree.insert(1);

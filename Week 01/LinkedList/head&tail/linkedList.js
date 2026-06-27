@@ -57,18 +57,81 @@ class LinkedList {
     return result;
   }
 
-  find(value) {
-    let current = this.head;
-
-    while (current !== null) {
-      if (value === current.value) {
-        return true;
+  insertAfter(value, afterValue) {
+    let curr = this.head;
+    while (curr !== null) {
+      if (curr.value === afterValue) {
+        const newNode = new Node(value);
+        newNode.next = curr.next;
+        curr.next = newNode;
+        if (curr.next === null) this.tail = newNode;
+        this.size++;
+        return;
       }
-      current = current.next;
+      curr = curr.next;
     }
-    return false;
   }
 
+  insertBefore(value, beforeValue) {
+    if (this.isEmpty()) {
+      console.log("List is empty");
+      return;
+    }
+    if (this.head.value === beforeValue) {
+      const newNode = new Node(value);
+      newNode.next = this.head;
+      this.head = newNode;
+      this.size++;
+      return;
+    }
+    let prev = null;
+    let curr = this.head;
+    while (curr !== null) {
+      if (curr.value === beforeValue) {
+        const newNode = new Node(value);
+        prev.next = newNode;
+        newNode.next = curr;
+        this.size++;
+        return;
+      }
+      prev = curr;
+      curr = curr.next;
+    }
+  }
+
+  insertAtIndex(value, index) {
+    if (index < 0 || index > this.size) {
+      console.log("Invalid index.");
+      return;
+    }
+    if (index === 0) {
+      this.prepend(value);
+      return;
+    }
+    if (index === this.size) {
+      this.append(value);
+      return;
+    }
+
+    let current = this.head;
+    let previous = null;
+    let currentIndex = 0;
+
+    while (currentIndex < index) {
+      previous = current;
+      current = current.next;
+      currentIndex++;
+    }
+
+    const newNode = new Node(value);
+    previous.next = newNode;
+    newNode.next = current;
+    if (index === this.size) {
+      this.tail = newNode;
+    }
+    this.size++;
+    console.log(`Inserted ${value} at index ${index}`);
+  }
   deleteFirst() {
     if (this.isEmpty()) {
       return "Nothing to remove, the list is empty";
@@ -111,6 +174,36 @@ class LinkedList {
     this.size--;
   }
 
+  find(value) {
+    let current = this.head;
+
+    while (current !== null) {
+      if (value === current.value) {
+        return true;
+      }
+      current = current.next;
+    }
+    return false;
+  }
+
+  findNthNod(n) {
+    if (n <= 0) {
+      console.log("out of bounds");
+      return;
+    }
+    let current = this.head;
+    let count = 1;
+    while (current !== null) {
+      if (count === n) {
+        return current.value;
+      }
+      current = current.next;
+      count++;
+    }
+
+    return -1;
+  }
+
   findMiddle() {
     if (this.isEmpty()) {
       console.log("list is empty");
@@ -130,6 +223,7 @@ class LinkedList {
 
     console.log("Middle element:", slowPointer.value);
   }
+
   findMiddleDelete() {
     if (this.size <= 2) {
       console.log("There is no middle to delete");
@@ -147,6 +241,22 @@ class LinkedList {
     prev.next = slowPointer.next;
     this.size--;
   }
+
+  countNodes() {
+    if (this.isEmpty()) {
+      console.log("List is empty", 0);
+      return;
+    }
+    let current = this.head;
+    let count = 0;
+    while (current !== null) {
+      count++;
+      current = current.next;
+    }
+
+    console.log("No of Nodes", count);
+  }
+
   removeEvenNumbers() {
     if (this.isEmpty()) {
       console.log("The list is empty");
@@ -188,20 +298,6 @@ class LinkedList {
     }
   }
 
-  countNodes() {
-    if (this.isEmpty()) {
-      console.log("List is empty", 0);
-      return;
-    }
-    let current = this.head;
-    let count = 0;
-    while (current !== null) {
-      count++;
-      current = current.next;
-    }
-
-    console.log("No of Nodes", count);
-  }
   removeDuplicates() {
     let current = this.head;
     while (current !== null) {
@@ -254,6 +350,7 @@ class LinkedList {
 
     return frequency;
   }
+
   largest() {
     if (this.isEmpty()) {
       console.log("List is empty");
@@ -271,6 +368,7 @@ class LinkedList {
 
     return largest;
   }
+
   secondLargest() {
     if (this.isEmpty()) {
       console.log("List is empty");
@@ -294,64 +392,7 @@ class LinkedList {
 
     return { largest, secondLargest };
   }
-  
-  getNodeAtIndex(index) {
-    if (index < 1 || index > this.size) {
-      throw new Error("Invalid index");
-    }
 
-    let current = this.head;
-    let i = 1;
-    while (current) {
-      if (index == i) {
-        console.log("data =>", current.data);
-        return;
-      }
-      i++;
-      current = current.next;
-    }
-  }
-
-  insertAfter(value, afterValue) {
-    let curr = this.head;
-    while (curr !== null) {
-      if (curr.value === afterValue) {
-        const newNode = new Node(value);
-        newNode.next = curr.next;
-        curr.next = newNode;
-        if (curr.next === null) this.tail = newNode;
-        this.size++;
-        return;
-      }
-      curr = curr.next;
-    }
-  }
-  insertBefore(value, beforeValue) {
-    if (this.isEmpty()) {
-      console.log("List is empty");
-      return;
-    }
-    if (this.head.value === beforeValue) {
-      const newNode = new Node(value);
-      newNode.next = this.head;
-      this.head = newNode;
-      this.size++;
-      return;
-    }
-    let prev = null;
-    let curr = this.head;
-    while (curr !== null) {
-      if (curr.value === beforeValue) {
-        const newNode = new Node(value);
-        prev.next = newNode;
-        newNode.next = curr;
-        this.size++;
-        return;
-      }
-      prev = curr;
-      curr = curr.next;
-    }
-  }
   deleteValue(value) {
     if (this.isEmpty()) {
       console.log("List is empty");
@@ -375,6 +416,7 @@ class LinkedList {
       current = current.next;
     }
   }
+
   reverse() {
     if (this.isEmpty()) {
       console.log("List is empty");
@@ -393,121 +435,8 @@ class LinkedList {
     this.tail = this.head;
     this.head = prev;
   }
-  mergeTwoSortedLinkedList(list1, list2) {
-    let p1 = list1.head;
-    let p2 = list2.head;
-    let mergedList = new LinkedList();
 
-    while (p1 !== null || p2 !== null) {
-      if (p1 === null) {
-        mergedList.append(p2.value);
-        p2 = p2.next;
-      } else if (p2 === null) {
-        mergedList.append(p1.value);
-        p1 = p1.next;
-      } else {
-        if (p1.value < p2.value) {
-          mergedList.append(p1.value);
-          p1 = p1.next;
-        } else {
-          mergedList.append(p2.value);
-          p2 = p2.next;
-        }
-      }
-    }
-
-    return mergedList;
-  }
-  removeFromFront() {
-    if (this.isEmpty()) {
-      console.log("List is empty");
-      return;
-    }
-    this.head = this.head.next;
-    if (this.head === null) this.tail = null;
-    this.size--;
-    console.log("Removed from front.");
-  }
-  removeFromEnd() {
-    if (this.isEmpty()) {
-      console.log("List is empty");
-      return;
-    }
-
-    if (this.size === 1) {
-      this.head = null;
-      this.tail = null;
-    } else {
-      let current = this.head;
-      while (current.next !== this.tail) {
-        current = current.next;
-      }
-      current.next = null;
-      this.tail = current;
-    }
-    this.size--;
-    console.log("Removed from end.");
-  }
-  insertAtIndex(value, index) {
-    if (index < 0 || index > this.size) {
-      console.log("Invalid index.");
-      return;
-    }
-    if (index === 0) {
-      this.prepend(value);
-      return;
-    }
-    if (index === this.size) {
-      this.append(value);
-      return;
-    }
-
-    let current = this.head;
-    let previous = null;
-    let currentIndex = 0;
-
-    while (currentIndex < index) {
-      previous = current;
-      current = current.next;
-      currentIndex++;
-    }
-
-    const newNode = new Node(value);
-    previous.next = newNode;
-    newNode.next = current;
-    if (index === this.size) {
-      this.tail = newNode;
-    }
-    this.size++;
-    console.log(`Inserted ${value} at index ${index}`);
-  }
-  removeAtIndex(index) {
-    if (index < 0 || index >= this.size) {
-      console.log("Invalid index.");
-      return;
-    }
-
-    if (index === 0) {
-      this.head = this.head.next;
-      if (this.head === null) this.tail = null;
-      this.size--;
-      console.log("Removed from index 0");
-      return;
-    }
-
-    let current = this.head;
-    let count = 0;
-
-    while (count < index - 1) {
-      current = current.next;
-      count++;
-    }
-
-    current.next = current.next.next;
-    if (current.next === null) this.tail = current;
-    this.size--;
-    console.log(`Removed from index ${index}`);
-  }
+  
   detectCycle() {
     if (this.isEmpty()) {
       console.log("List is empty, no cycle.");
@@ -529,26 +458,8 @@ class LinkedList {
     console.log("No cycle detected.");
     return false;
   }
-  
-  findNthNod(n) {
-    if (n <= 0) {
-      console.log("out of bounds");
-      return;
-    }
-    let current = this.head;
-    let count = 1;
-    while (current !== null) {
-      if (count === n) {
-        return current.value;
-      }
-      current = current.next;
-      count++;
-    }
 
-    return -1;
-  }
-
-  removeNthFromEndSimpleMethod(n) {
+  removeNthFromEndCountMethod(n) {
     if (n <= 0 || n > this.size) {
       return "Invalid input";
     }
@@ -576,11 +487,35 @@ class LinkedList {
     this.size--;
     return `Removed node with value ${removedValue} at index ${indexToRemove}`;
   }
-  removeNthFromEndWithSlowFast() {}
-
-  //add two numbers as in a linked list
-  //check the linked listis pailndrome or not
   
+  removeAtIndex(index) {
+    if (index < 0 || index >= this.size) {
+      console.log("Invalid index.");
+      return;
+    }
+
+    if (index === 0) {
+      this.head = this.head.next;
+      if (this.head === null) this.tail = null;
+      this.size--;
+      console.log("Removed from index 0");
+      return;
+    }
+
+    let current = this.head;
+    let count = 0;
+
+    while (count < index - 1) {
+      current = current.next;
+      count++;
+    }
+
+    current.next = current.next.next;
+    if (current.next === null) this.tail = current;
+    this.size--;
+    console.log(`Removed from index ${index}`);
+  }
+  removeNthFromEndWithSlowFast() {}
 }
 
 const list = new LinkedList();

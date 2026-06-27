@@ -1,3 +1,124 @@
+//vv Find the Sum
+const abc = [
+  { f: 34, l: 4 },
+  { f: 34, l: 4 },
+  { f: 34, l: 4 },
+  { f: 34, l: 4 },
+  { f: 34, l: 4 },
+  { f: 34, l: 4 },
+];
+
+const abcSum = (abc) => {
+  let sum1 = 0;
+  abc.forEach((ele) => {
+    sum1 += ele.f + ele.l;
+  });
+
+  return sum1;
+};
+
+const bc = [{ s: 4 }, { d: 4 }, { f: 4 }];
+
+const sum4 = (bc) => {
+  let sum = 0;
+  bc.forEach((obj) => {
+    if (obj.s) {
+      sum += obj.s;
+    } else if (obj.d) {
+      sum += obj.d;
+    } else {
+      sum += obj.f;
+    }
+  });
+
+  return sum;
+};
+
+// 100 + 1 = 101
+// 98 + 3 = 101
+// 94 + 7 = 101
+// 88 + 13 = 101
+// 80 + 21 = 101
+// 70 + 31 = 101
+// 58 + 43 = 101
+// 44 + 57 = 101
+// 28 + 73 = 101
+// 10 + 91 = 101
+
+const print = () => {
+  let i = 100;
+  let n = 0;
+  let count = 1;
+
+  while (i > 10) {
+    console.log(`${(i = i - count * 2)} + ${(n = n + count * 2)} = ${i + n}`);
+    count++;
+  }
+};
+
+const a = [{ adf: [{ adf: [4, 34, 34], daf: 5 }] }];
+
+const sum = (a) => {
+  let sum1 = 0;
+
+  a[0].adf.forEach((e) => {
+    e.adf.forEach((a) => {
+      sum1 += a;
+    });
+    sum1 += e.daf;
+  });
+
+  return sum1;
+};
+
+const ab = { b: { c: { d: [2, 3, 4, 5] } } };
+
+const sum3 = (ab) => {
+  let sum12 = 0;
+  ab.b.c.d.forEach((n) => {
+    sum12 += n;
+  });
+
+  return sum12;
+};
+
+// Find the longest repeating char in string “hdhfkuuuu” output should be uuuu
+
+const longest = (str) => {
+  let maxCount = 0;
+  let currentCount = 1;
+  let longest = "";
+  let currentChar = str[0];
+  let inSequence = false;
+
+  for (let i = 1; i < str.length; i++) {
+    if (str[i] === currentChar) {
+      currentCount++;
+      inSequence = true;
+    } else {
+      if (inSequence && currentCount > maxCount) {
+        maxCount = currentCount;
+        longest = currentChar;
+      }
+
+      currentChar = str[i];
+      currentCount = 1;
+      inSequence = false;
+    }
+  }
+
+  // Final check in case the longest sequence is at the end of the string
+
+  if (inSequence && currentCount > maxCount) {
+    maxCount = currentCount;
+    longest = currentChar;
+  }
+
+  return longest.repeat(maxCount);
+};
+
+console.log(longest("hdhfkuuuu"));
+
 //Find the second largest without using any built in method
 const findSecondLargest = (arr) => {
   let largest = Infinity;
@@ -113,44 +234,92 @@ function findFirstAndLast(arr, target) {
   };
 }
 
-// // Find the first or last occurrence of a target element in a sorted array with duplicates.
+// Find the first or last occurrence of a target element in a sorted array with duplicates.
 
-// // Given a sorted array, find the smallest positive integer that is missing.
+function findFirstOccurrence(nums, target) {
+  let left = 0;
+  let right = nums.length - 1;
+  let result = -1; // To store the first occurrence
 
-// // Given a sorted array, find the largest element less than or equal to a target value.
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
 
-// // Given an array of book pages and k students, allocate books such that the maximum pages assigned to a student is minimized.
+    if (nums[mid] === target) {
+      result = mid; // Update the result with the current mid
+      right = mid - 1; // Search to the left for the first occurrence
+    } else if (nums[mid] < target) {
+      left = mid + 1; // Target is on the right side
+    } else {
+      right = mid - 1; // Target is on the left side
+    }
+  }
 
-// // Write a function to find the node with the maximum value in the linked list.
+  return result; // If not found, return -1
+}
+
+// Given a sorted array, find the smallest positive integer that is missing.
+
+const findMissingPositive = (arr) => {
+  let expected = 1;
+
+  // Step 1: Iterate through the sorted array
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === expected) {
+      expected++;
+    }
+  }
+
+  return expected;
+};
+
+// Write a linear search to find the minimum or maximum value in an array.
+
+const Q5 = (arr) => {
+  let minElement = Infinity;
+  let maxElement = -Infinity;
+
+  for (const n of arr) {
+    if (n < minElement) {
+      minElement = n;
+    }
+    if (n > maxElement) {
+      maxElement = n;
+    }
+  }
+  return { maxElement, minElement };
+};
+
+// Write a function that takes two arrays and returns an array of their intersection.
+function findTheLastOccurence(nums, target) {
+  let left = 0
+  let right = nums.length - 1
+  let lastOccurence = -1
+  while (left <= right) {
+    const middle = Math.floor((left + right) / 2)
+    if (nums[middle] == target) {
+      lastOccurence = middle
+      left = middle + 1
+    } else if (nums[middle] < target) {
+      left = middle + 1
+    } else if (nums[middle] > target) {
+      right = middle - 1
+    }
+  }
+  return lastOccurence
+}
+
+
+
+
 
 // // Write a function to split a linked list into two halves. If the list has an odd number of nodes, the extra node should go to the first half.
 
-// // Write a function to delete every alternate node in the linked list.
-
-// // Write a function to search for a specific value in the linked list
 
 // // Write a function to count the total number of nodes in the linked list
 
 // // Remove Duplicates from Unsorted List
 
-// // Write a function that takes two arrays and returns an array of their intersection.
-// function findTheLastOccurence(nums, target) {
-//   let left = 0
-//   let right = nums.length - 1
-//   let lastOccurence = -1
-//   while (left <= right) {
-//     const middle = Math.floor((left + right) / 2)
-//     if (nums[middle] == target) {
-//       lastOccurence = middle
-//       left = middle + 1
-//     } else if (nums[middle] < target) {
-//       left = middle + 1
-//     } else if (nums[middle] > target) {
-//       right = middle - 1
-//     }
-//   }
-//   return lastOccurence
-// }
+
 
 // // count majority element
 
@@ -166,10 +335,6 @@ function findFirstAndLast(arr, target) {
 // // 2) Find the Maximum and Minimum Elements:
 
 // // Traverse the array using linear search to find the largest and smallest elements.
-
-// // 3) Search for the First and Last Occurrence:
-
-// // Find the first and last occurrence of a target value in an array.
 
 // // 4) Count the Occurrences of an Element:
 
@@ -882,145 +1047,6 @@ function findFirstAndLast(arr, target) {
 
 // Would you like more details or explanations for specific questions or approaches in the roadmap?
 
-// const a = [{ adf: [{ adf: [4, 34, 34], daf: 5 }] }];
-
-// const sum = (a) => {
-//   let sum1 = 0;
-
-//   a[0].adf.forEach((e) => {
-//     e.adf.forEach((a) => {
-//       sum1 += a;
-//     });
-//     sum1 += e.daf;
-//   });
-
-//   return sum1;
-// };
-
-// console.log(sum(a));
-
-// const abc = [
-//   { f: 34, l: 4 },
-//   { f: 34, l: 4 },
-//   { f: 34, l: 4 },
-//   { f: 34, l: 4 },
-//   { f: 34, l: 4 },
-//   { f: 34, l: 4 },
-// ];
-
-// const abcSum = (abc) => {
-//   let sum1 = 0;
-//   abc.forEach((ele) => {
-//     sum1 += ele.f + ele.l;
-//   });
-
-//   return sum1;
-// };
-
-// console.log(abcSum(abc));
-
-// let ab = { b: { c: { d: [2, 3, 4, 5] } } };
-
-// const sum3 = (ab) => {
-//   let sum12 = 0;
-//   ab.b.c.d.forEach((n) => {
-//     sum12 += n;
-//   });
-
-//   return sum12;
-// };
-
-// console.log(sum3(ab));
-
-// let bc = [{ s: 4 }, { d: 4 }, { f: 4 }];
-
-// const sum4 = (bc) => {
-//   let sum = 0;
-//   let ar = [];
-//   bc.forEach((obj) => {
-//     if (obj.s) {
-//       ar.push(obj.s);
-//     } else if (obj.d) {
-//       ar.push(obj.d);
-//     } else {
-//       ar.push(obj.f);
-//     }
-//   });
-
-//   ar.forEach(n => {
-
-//     sum+=n
-//   })
-//   return sum
-// };
-
-// console.log(sum4(bc));
-// Find the longest repeating char in string “hdhfkuuuu” output should be uuuu
-
-// const longest = (str) => {
-//   const strAr = str.split("");
-
-//   let count = {};
-//   strAr.forEach((s) => {
-//     if (count[s]) {
-//       count[s]++;
-//     } else {
-//       count[s] = 1;
-//     }
-//   });
-
-//   let maxCount = 0;
-//   let h = [];
-//   for (let char in count) {
-//     if (count[char] > maxCount) {
-//       maxCount = count[char];
-//     }
-//   }
-
-//   for (let char in count) {
-//     if (count[char] === maxCount) {
-//       for (let i = 0; i < maxCount; i++) {
-//         h.push(char);
-//       }
-//     }
-//   }
-//   return h.join("")
-// };
-
-// console.log(longest("hdhfkuuuu"));
-
-// autocomplete(prefix) {
-//     const results = [];  // Array to hold autocomplete results
-//     let curr = this.root;
-
-//     // Traverse the Trie to find the end of the prefix
-//     for (const char of prefix) {
-//         if (!(char in curr.children)) {
-//             return results;  // No words found with this prefix
-//         }
-//         curr = curr.children[char];  // Move to the child node
-//     }
-
-//     // Use a stack to iteratively find all words starting from the current node
-//     const stack = [{ node: curr, path: prefix }];
-
-//     while (stack.length > 0) {
-//         const { node, path } = stack.pop();  // Get the top element from the stack
-
-//         // If this node marks the end of a word, add it to results
-//         if (node.isEndOfWord) {
-//             results.push(path);  // Add the complete word to results
-//         }
-
-//         // Recur for each child node by adding them to the stack
-//         for (const char in node.children) {
-//             stack.push({ node: node.children[char], path: path + char });  // Build the word
-//         }
-//     }
-
-//     return results;  // Return all found words
-// }
-
 // Given an array of 'n' elements and a target element 't', find the index of 't' in the array. Return -1 if the target element is not found.
 
 // const linearSearch = (arr,t) =>{
@@ -1070,21 +1096,6 @@ function findFirstAndLast(arr, target) {
 
 // console.log(Q2(["apple", "banana", "cherry", "date", "fig", "grape"], "date"))
 
-// Modify linear search to return the index of the last occurrence of a target number in an unsorted array.
-
-// const Q3 = (arr, t) => {
-
-//     let lastIndex = -1;
-
-//     for (let i = 0; i < arr.length; i++) {
-//         if (arr[i] === t) {
-//             lastIndex = i;
-//         }
-//     }
-
-//     return lastIndex;
-// }
-
 // console.log(Q3([4, 7, 8, 4, 2, 4, 9], 4))
 
 // Count the number of occurrences of a given element in an unsorted array using linear search.
@@ -1103,30 +1114,365 @@ function findFirstAndLast(arr, target) {
 // }
 
 // console.log(Q4([5, 3, 9, 3, 5, 7, 3], 3))
+// Absolutely! Below are the **additional array and string-related problems** that will help you master essential concepts and algorithms, along with the problems I've previously mentioned. These problems focus on more advanced concepts, such as prefix sums, sliding window, string algorithms, and more.
 
-// Write a linear search to find the minimum or maximum value in an array.
+// ### Additional Array & String Problems to Study
 
-// const Q5 = (arr) => {
+// ---
 
-//     let minElement = Infinity
-//     let maxElement = -Infinity
+// ### 1. **Prefix and Suffix Arrays**
 
-//     for (const n of arr) {
+// - **Problem**: Calculate the sum of elements in a subarray using a prefix sum array. Given an array of integers, find the sum of elements in the range `[i, j]` using the prefix sum.
+//    - **Input**: `arr = [1, 2, 3, 4, 5]`, `i = 1`, `j = 3`
+//    - **Output**: `9` (Sum of subarray from index 1 to 3: `[2, 3, 4]`)
 
-//         if (n < minElement) {
+// - **Problem**: Given an array of integers, find the product of all elements except the one at index `i` (without using division).
+//    - **Input**: `arr = [1, 2, 3, 4]`
+//    - **Output**: `[24, 12, 8, 6]`
 
-//             minElement = n
+// ---
 
-//         }
+// ### 2. **Bit Manipulation**
 
-//         if (n > maxElement) {
+// - **Problem**: Find the **only non-repeating element** in an array where all others repeat.
+//    - **Input**: `arr = [2, 3, 5, 4, 5, 2, 4]`
+//    - **Output**: `3`
 
-//             maxElement = n
-//         }
-//     }
+// - **Problem**: **Count the number of set bits** (1s) in the binary representation of all numbers in the array.
+//    - **Input**: `arr = [1, 3, 7]`
+//    - **Output**: `5` (Binary: `1 -> 1 bit, 3 -> 2 bits, 7 -> 3 bits`)
 
-//     return { maxElement, minElement }
+// ---
 
-// }
+// ### 3. **Sorting Algorithms and Their Applications**
 
-// console.log(Q5([22, 11, 34, 56, 7, 19, 3]))
+// - **Problem**: Given an array of intervals, **merge all overlapping intervals**.
+//    - **Input**: `[[1, 3], [2, 4], [5, 7], [6, 8]]`
+//    - **Output**: `[[1, 4], [5, 8]]`
+
+// - **Problem**: **Kth Largest Element in an Array**: Find the kth largest element in an unsorted array without sorting.
+//    - **Input**: `arr = [12, 3, 5, 7, 19]`, `k = 2`
+//    - **Output**: `12`
+
+// ---
+
+// ### 4. **Longest Common Substring/Subsequence**
+
+// - **Problem**: Find the **Longest Common Substring** of two strings.
+//    - **Input**: `str1 = "abcdef"`, `str2 = "zcdemf"`
+//    - **Output**: `"cd"`
+
+// - **Problem**: Find the **Longest Common Subsequence** of two strings.
+//    - **Input**: `str1 = "abcde"`, `str2 = "ace"`
+//    - **Output**: `"ace"`
+
+// ---
+
+// ### 5. **String Compression**
+
+// - **Problem**: **Run-Length Encoding**: Compress a string such that consecutive repeating elements are replaced by the element followed by its count.
+//    - **Input**: `"aabbbccdd"`
+//    - **Output**: `"a2b3c2d2"`
+
+// - **Problem**: Given a string, **compress it** and return the length of the compressed version.
+//    - **Input**: `"aabcccccaaa"`
+//    - **Output**: `7` (Compressed: `"a2b1c5a3"`)
+
+// ---
+
+// ### 6. **Anagram Detection**
+
+// - **Problem**: **Check if two strings are anagrams** of each other (ignoring spaces and case).
+//    - **Input**: `str1 = "listen"`, `str2 = "silent"`
+//    - **Output**: `True`
+
+// - **Problem**: **Group Anagrams**: Given a list of strings, group the anagrams together.
+//    - **Input**: `strs = ["eat", "tea", "tan", "ate", "nat", "bat"]`
+//    - **Output**: `[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]`
+
+// ---
+
+// ### 7. **Sliding Window**
+
+// - **Problem**: **Longest Substring with At Most K Distinct Characters**: Given a string, find the longest substring that contains at most `k` distinct characters.
+//    - **Input**: `s = "eceba"`, `k = 2`
+//    - **Output**: `"ece"`
+
+// - **Problem**: **Minimum Window Substring**: Given a string and a pattern, find the smallest substring containing all characters of the pattern.
+//    - **Input**: `str = "ADOBECODEBANC"`, `pattern = "ABC"`
+//    - **Output**: `"BANC"`
+
+// ---
+
+// ### 8. **String Permutations**
+
+// - **Problem**: **Generate All Permutations** of a string.
+//    - **Input**: `"abc"`
+//    - **Output**: `["abc", "acb", "bac", "bca", "cab", "cba"]`
+
+// - **Problem**: Given a string, find all **distinct permutations** of that string.
+//    - **Input**: `"aab"`
+//    - **Output**: `["aab", "aba", "baa"]`
+
+// ---
+
+// ### 9. **Longest Palindromic Substring**
+
+// - **Problem**: Given a string, find the **Longest Palindromic Substring**.
+//    - **Input**: `"babad"`
+//    - **Output**: `"bab"` or `"aba"`
+
+// - **Problem**: Count all **palindromic substrings** in a given string.
+//    - **Input**: `"abc"`
+//    - **Output**: `3` (Substrings: `"a", "b", "c"`)
+
+// ---
+
+// ### 10. **String Matching Algorithms**
+
+// - **Problem**: **Pattern Matching**: Given a string and a pattern, determine if the pattern exists in the string using the **Knuth-Morris-Pratt (KMP)** algorithm.
+//    - **Input**: `text = "ABABDABACDABABCABAB"`, `pattern = "ABABCABAB"`
+//    - **Output**: `True`
+
+// - **Problem**: **Rabin-Karp Algorithm**: Find the occurrences of a substring in a string using hash values.
+//    - **Input**: `str = "AABAACAABAA"`, `pattern = "AABA"`
+//    - **Output**: `True`
+
+// ---
+
+// ### 11. **Z-Algorithm**
+
+// - **Problem**: **Pattern Matching using Z-Algorithm**: Find all occurrences of a pattern in a string using the Z-algorithm.
+//    - **Input**: `str = "abcabcabc"`, `pattern = "abc"`
+//    - **Output**: `[0, 3, 6]`
+
+// ---
+
+// ### 12. **Matrix Representation (for Strings)**
+
+// - **Problem**: **Word Search in a 2D grid**: Given a 2D grid of characters, find if a word exists in the grid by traversing in all 8 directions.
+//    - **Input**: `grid = [["A", "B", "C", "E"], ["S", "F", "C", "S"], ["A", "D", "E", "E"]]`, `word = "ABCCED"`
+//    - **Output**: `True`
+
+// - **Problem**: **String Matching in a 2D Array**: Search for a pattern string in a 2D character matrix.
+//    - **Input**: `grid = [["A", "B", "C", "D"], ["E", "F", "G", "H"], ["I", "J", "K", "L"]]`, `word = "CFG"`
+//    - **Output**: `True`
+
+// ---
+
+// ### 13. **Subarray Problems with Specific Conditions**
+
+// - **Problem**: Find the **maximum sum subarray** in an array using **Kadane’s Algorithm**.
+//    - **Input**: `arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]`
+//    - **Output**: `6` (Subarray: `[4, -1, 2, 1]`)
+
+// - **Problem**: **Subarray with Sum Equals Zero**: Find the longest subarray with a sum of `0`.
+//    - **Input**: `arr = [1, 2, -3, 3, 1]`
+//    - **Output**: `4` (Subarray: `[2, -3, 3, 1]`)
+
+// ---
+
+// ### 14. **String Transformations**
+
+// - **Problem**: **Edit Distance**: Find the minimum number of operations (insertions, deletions, substitutions) required to convert one string to another.
+//    - **Input**: `str1 = "kitten"`, `str2 = "sitting"`
+//    - **Output**: `3`
+
+// - **Problem**: **String Rotation**: Check if one string is a rotation of another string.
+//    - **Input**: `str1 = "abcde"`, `str2 = "deabc"`
+//    - **Output**: `True`
+
+// ---
+
+// ### 15. **Array Partitioning & Balancing**
+
+// - **Problem**: **Partition Equal Subset Sum**: Given a set of numbers, determine if it can be partitioned into two subsets with equal sum.
+//    - **Input**: `arr = [1, 5, 11, 5]`
+//    - **Output**: `True`
+
+// - **Problem**: **Rearrange Array** to alternate even and odd numbers, maintaining relative order.
+//    - **Input**: `arr = [1, 2, 3, 4, 5]`
+//    - **Output**: `[2, 1, 4, 3, 5]`
+
+// ---
+
+// ### Conclusion:
+// These additional problems, along with the previous ones, cover a broad range of array and string-related concepts and algorithms. By practicing these, you’ll improve both your theoretical understanding and hands-on coding skills in solving array and string problems effectively. Keep challenging yourself with these problems to become proficient in working with arrays and strings!
+
+// 1. Array Rotation
+// Problem: Rotate an array arr of size n to the right by k steps. Write your own implementation without using any built-in methods like splice() or reverse().
+// Input: Array [1, 2, 3, 4, 5], k = 2
+// Output: [4, 5, 1, 2, 3]
+// Hint: Think of the array as a circular structure to solve this.
+
+// 2. Find the Missing Number
+// Problem: You are given an array of integers from 1 to n. There is exactly one missing number. Find the missing number without using any built-in methods or extra space.
+// Input: [1, 2, 4, 6, 3, 7, 8]
+// Output: 5
+// 3. First Non-Repeating Character in String
+// Problem: Write a function that returns the first non-repeating character in a string. Do this without using any built-in JavaScript string functions like indexOf().
+// Input: "geeksforgeeks"
+// Output: "f"
+// 4. Move Zeros to the End
+// Problem: Given an array, move all the zeros to the end without using any built-in methods like filter(). Maintain the relative order of non-zero elements.
+// Input: [0, 1, 2, 0, 3, 4]
+// Output: [1, 2, 3, 4, 0, 0]
+// 5. Find the Pair with the Largest Product
+// Problem: Given an array of integers, find two numbers such that their product is the largest possible. Do this without using sorting or any built-in methods.
+// Input: [1, 2, 3, 4, 5]
+// Output: 20 (Pair: 4 and 5)
+// 6. Check if an Array is a Subarray of Another Array
+// Problem: Given two arrays, check if one array is a subarray of another. Implement it without using built-in functions like includes().
+// Input: arr1 = [1, 2, 3], arr2 = [2, 3]
+// Output: True
+// 7. Longest Subarray with Sum Zero
+// Problem: Given an array of integers, find the length of the longest subarray with a sum of 0.
+// Input: [1, 2, -3, 3, 1]
+// Output: 4 (Subarray [2, -3, 3, 1])
+// 8. Array with All Unique Elements
+// Problem: Given an array, return true if all elements in the array are unique, and false otherwise. Do this without using a hash map or Set.
+// Input: [1, 2, 3, 4]
+// Output: true
+// 9. Intersection of Two Arrays
+// Problem: Find the intersection of two arrays without using filter() or includes().
+// Input: [1, 2, 2, 1], [2, 2]
+// Output: [2]
+// 10. Sort an Array Without Using Built-in Methods
+// Problem: Implement a sorting algorithm (like bubble sort or selection sort) to sort an array without using any built-in sorting methods.
+// Input: [5, 2, 9, 1, 5, 6]
+// Output: [1, 2, 5, 5, 6, 9]
+// 11. Sum of Two Numbers in an Array
+// Problem: Given an array of integers and a target sum, determine if there are two distinct numbers in the array that add up to the target. Implement this without using indexOf() or any built-in methods.
+// Input: [3, 4, 2, 7, 1], target = 10
+// Output: true (Pair: 3 + 7)
+// 12. Array Compression
+// Problem: Given an array of numbers, compress the array such that each consecutive repeating element is represented by a single element followed by the count. For example, [1, 1, 2, 3, 3, 3, 4] should be compressed to [1, 2, 2, 1, 3, 3, 4, 1].
+// Input: [1, 1, 2, 3, 3, 3, 4]
+// Output: [1, 2, 2, 1, 3, 3, 4, 1]
+// 13. Find the Longest Palindromic Substring
+// Problem: Find the longest palindromic substring in a given string. Do this without using built-in string methods such as split(), reverse(), or substring().
+// Input: "babad"
+// Output: "bab" or "aba"
+// 14. Trapping Rain Water
+// Problem: Given an array representing the heights of bars in a histogram, calculate how much water can be trapped between the bars after raining. Do this without using any extra space for the result array.
+// Input: [0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+// Output: 6 units of water
+// 15. Find the Longest Consecutive Sequence
+// Problem: Given an unsorted array of integers, find the length of the longest consecutive elements sequence. Do this without using any extra space.
+// Input: [100, 4, 200, 1, 3, 2]
+// Output: 4 (Sequence: 1, 2, 3, 4)
+// 16. Find the Majority Element
+// Problem: Given an array of size n, find the majority element (element that appears more than n/2 times). Do this without using any extra space.
+// Input: [3, 3, 4, 2, 4, 4, 2, 4, 4]
+// Output: 4
+// 17. Reverse Words in a String
+// Problem: Given a string, reverse the order of words in the string without using built-in string manipulation methods.
+// Input: "The quick brown fox"
+// Output: "fox brown quick The"
+// These problems will give you a wide range of challenges, focusing on both logical thinking and manual implementation, without relying on built-in methods. By practicing these, you will improve your ability to think through complex problems and implement solutions efficiently.
+
+
+// You said:
+// give me more if you  think its importand pattern to study
+// ChatGPT said:
+// ChatGPT
+// Absolutely! Here are some additional problems that will deepen your understanding of important patterns, enhance your problem-solving skills, and push your logical thinking to the next level. These problems focus on essential concepts and patterns that will help you handle a wide range of array and string challenges.
+
+// 18. Find All Pairs in an Array that Sum to a Target
+// Problem: Given an array of integers and a target sum, find all pairs of numbers in the array that add up to the target sum. Do this without using any built-in methods like includes().
+// Input: [1, 2, 3, 4, 5], target = 6
+// Output: [[1, 5], [2, 4]]
+// Hint: This requires a two-pointer or hash map-based solution, but without using hash maps directly.
+
+// 19. Find All Triplets in an Array that Sum to a Target
+// Problem: Given an array of integers and a target sum, find all unique triplets in the array that sum up to the target. Do not use any extra space for the result and avoid using sorting methods.
+// Input: [1, 2, 3, 0, -1, -2, 1], target = 0
+// Output: [[-2, 1, 1], [-1, 0, 1]]
+// Hint: This involves checking combinations of three elements, using two pointers or sliding window technique.
+
+// 20. Find the Missing Number in a Sequence
+// Problem: Given an array of numbers where one number from 1 to n is missing, find the missing number. Do this without using any extra space or built-in sorting methods.
+// Input: [3, 1, 2, 5], n = 5
+// Output: 4
+// Hint: Try using the sum of the first n natural numbers.
+
+// 21. Product of All Except the Current Element
+// Problem: Given an array, return a new array such that each element at index i is the product of all the numbers in the original array except the one at i. Do this without using division and without using any extra space except the result array.
+// Input: [1, 2, 3, 4]
+// Output: [24, 12, 8, 6]
+// 22. Longest Increasing Subsequence
+// Problem: Find the length of the longest strictly increasing subsequence in an array. Do this without sorting or using any built-in methods like sort().
+// Input: [10, 22, 9, 33, 21, 50, 41, 60, 80]
+// Output: 6 (Longest Increasing Subsequence: [10, 22, 33, 50, 60, 80])
+// 23. Find the Kth Largest Element in an Array
+// Problem: Find the kth largest element in an unsorted array without using sorting methods or extra space.
+// Input: [12, 3, 5, 7, 19], k = 2
+// Output: 12
+// 24. Count Inversions in an Array
+// Problem: Given an array, count the number of inversions. An inversion is a pair of indices i and j such that i < j and arr[i] > arr[j].
+// Input: [2, 4, 1, 3, 5]
+// Output: 3 (Inversions: (2, 1), (4, 1), (4, 3))
+// Hint: This problem can be solved by a modified merge sort.
+
+// 25. Find the Longest Subarray of Distinct Elements
+// Problem: Given an array of integers, find the length of the longest subarray with distinct elements.
+// Input: [1, 2, 3, 1, 2, 3, 4]
+// Output: 4 (Subarray: [1, 2, 3, 4])
+// 26. Check if Array is Sorted and Rotated
+// Problem: Given an array, check whether it is sorted and rotated. An array is sorted and rotated if you can rotate a sorted array at some point to form the given array.
+// Input: [3, 4, 5, 1, 2]
+// Output: True
+// 27. Minimum Number of Jumps to Reach End of Array
+// Problem: Given an array of integers where each element represents the maximum number of steps that can be made forward from that element, find the minimum number of jumps to reach the end.
+// Input: [6, 2, 4, 0, 5, 1, 1, 4, 2, 9]
+// Output: 2 (Jump from 6 to 5 and then from 5 to 9)
+// 28. Find the Missing Number from an Array with No Duplicates
+// Problem: Given an array of size n-1 containing unique elements from 1 to n, find the missing number without using extra space.
+// Input: [1, 2, 4, 5], n = 5
+// Output: 3
+// Hint: Sum-based or XOR-based solution.
+
+// 29. Smallest Subarray with a Sum Greater than or Equal to K
+// Problem: Given an array of positive integers and a number k, find the smallest subarray with a sum greater than or equal to k. Return the length of this subarray.
+// Input: [1, 4, 45, 6, 0, 19], k = 51
+// Output: 3 (Subarray: [4, 45, 6])
+// 30. Merge Intervals
+// Problem: Given a collection of intervals, merge all overlapping intervals. Do this without using built-in sorting or interval merging methods.
+// Input: [[1, 3], [2, 4], [5, 7], [6, 8]]
+// Output: [[1, 4], [5, 8]]
+// 31. Find All Unique Substrings of a String
+// Problem: Given a string, find all unique substrings of the string.
+// Input: "abc"
+// Output: ["a", "ab", "abc", "b", "bc", "c"]
+// Hint: Use sliding window or brute-force combination generation.
+
+// 32. Max Consecutive 1’s in a Binary Array
+// Problem: Given a binary array, find the length of the longest sequence of consecutive 1s.
+// Input: [1, 1, 0, 1, 1, 1]
+// Output: 3
+// 33. Find All Permutations of a String
+// Problem: Find all possible permutations of a given string. Avoid using built-in functions like permutation().
+// Input: "abc"
+// Output: ["abc", "acb", "bac", "bca", "cab", "cba"]
+// 34. Rotate Matrix (90 degrees)
+// Problem: Rotate an n x n matrix by 90 degrees clockwise. Do this without using any extra space for a new matrix.
+// Input:
+// csharp
+// Copy
+// [
+//   [1, 2, 3],
+//   [4, 5, 6],
+//   [7, 8, 9]
+// ]
+// Output:
+// csharp
+// Copy
+// [
+//   [7, 4, 1],
+//   [8, 5, 2],
+//   [9, 6, 3]
+// ]
+// 35. Maximum Product Subarray
+// Problem: Given an integer array, find the contiguous subarray (containing at least one number) that has the largest product and return its product.
+// Input: [2, 3, -2, 4]
+// Output: 6 (Subarray: [2, 3])

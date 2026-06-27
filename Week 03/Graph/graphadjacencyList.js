@@ -256,9 +256,7 @@ class Graph {
   // BFS finishes with the traversal order: [A, B, C, D, E]
 
   checkTwoNodesareConnected(vertex1, vertex2) {
-    return (
-      this.hasEdge(vertex1, vertex2) || this.bfs(vertex1).includes(vertex2)
-    );
+    return this.hasEdge(vertex1, vertex2) || this.bfs(vertex1).includes(vertex2);
   }
 
   shortestPath(startNode, endNode) {
@@ -272,16 +270,16 @@ class Graph {
 
     while (queue.length) {
       const path = queue.shift();
-      const currentNode  = path[path.length - 1];
+      const currentNode = path[path.length - 1];
 
-      if (currentNode  === endNode) {
+      if (currentNode === endNode) {
         return path;
       }
 
-      if (!visited.has(currentNode )) {
-        visited.add(currentNode );
+      if (!visited.has(currentNode)) {
+        visited.add(currentNode);
 
-        for (const neighbor of this.adjacencyList[currentNode ]) {
+        for (const neighbor of this.adjacencyList[currentNode]) {
           const newPath = [...path, neighbor];
           queue.push(newPath);
         }
@@ -290,7 +288,7 @@ class Graph {
 
     return [];
   }
-
+  // “Do I ever visit a node that I’ve already seen and it’s not the one I just came from?”
   detectCycle() {
     const visited = new Set();
 
@@ -319,6 +317,73 @@ class Graph {
     }
     return false;
   }
+
+  // ✅ Step 1: Understand What a Cycle Means in This Context
+  // A cycle happens when you revisit a node that you’ve already seen, 
+  // but you didn’t just come from it.
+
+  // This means the graph has a “loop” — a path that closes back on itself.
+
+  // ✅ Step 2: Imagine You’re Walking the Graph
+  // Let’s say you're standing at node A.
+
+  // You mark A as “visited.”
+
+  // From A, you walk to B.
+
+  // You mark B as visited.
+
+  // From B, you walk to C.
+
+  // You mark C as visited.
+
+  // From C, you see neighbor A again.
+
+  // You say: “Hmm, I’ve seen A before... but did I just come from A?”
+
+  // Yes? Then it’s fine — no cycle here.
+
+  // No? Then A is showing up again from a different path → that’s a cycle.
+
+  // ✅ Step 3: Think About How You’ll Track This
+  // As you walk:
+
+  // Keep a list of visited nodes so you know who you’ve seen.
+
+  // Also remember where you just came from — your "parent" — 
+  // so you can ignore that when checking for revisits.
+
+  // ✅ Step 4: Repeat for All Nodes
+  // Graphs aren’t always one big piece — so:
+
+  // For each node in the graph:
+
+  // If you haven’t visited it yet:
+
+  // Start a new walk from there.
+
+  // Apply the same logic above.
+
+  // This covers disconnected components.
+
+  // 🧠 Recap Mental Checklist:
+  // 🚶 Start at any unvisited node.
+
+  // 📌 Mark it as visited.
+
+  // 🔁 For each neighbor:
+
+  // If it’s not visited → walk to it.
+
+  // If it is visited → check:
+
+  // Is it my parent?
+
+  // ✅ Yes → okay.
+
+  // ❌ No → cycle!
+
+  // 🔄 Repeat for all nodes.
 
   // A visited set keeps track of visited nodes to avoid reprocessing nodes.
   // A stack is used to simulate the recursive DFS process, pushing nodes onto the stack

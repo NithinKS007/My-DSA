@@ -13,6 +13,37 @@ class Trie {
     this.root = new TrieNode();
   }
 
+  autocompleteManual(prefix) {
+    const results = [];
+    let curr = this.root;
+
+    // Traverse the Trie to find the node corresponding to the end of the prefix
+    for (const char of prefix) {
+      if (!(char in curr.children)) {
+        return results; // No words found with this prefix
+      }
+      curr = curr.children[char]; // Move to the next node
+    }
+
+    // Use a stack to perform a DFS and find all words starting from the current node
+    const stack = [{ node: curr, word: prefix }];
+    while (stack.length > 0) {
+      const { node, word } = stack.pop();
+
+      // If this node marks the end of a word, add it to results
+      if (node.isEndOfWord) {
+        results.push(word);
+      }
+
+      // Recur for each child node by adding them to the stack
+      for (const char in node.children) {
+        stack.push({ node: node.children[char], word: word + char });
+      }
+    }
+
+    return results; // Return all found words
+  }
+
   insert(word) {
     let curr = this.root;
     for (const char of word) {
@@ -82,15 +113,15 @@ class Trie {
     }
   }
 
-// Start at the root node.
-// Initialize an empty result array to store the autocompleted words
-// Loop over each character of the input prefix
-// Check if the character exists in current.children. If it doesn’t, 
-// return the empty result array because no words match the prefix
-// If char doesn't exist, return an empty array
-// Move current to the child node corresponding to char
-// After processing the prefix, call getwords() to collect all words starting from the current node.
-// Return the list of words in result.
+  // Start at the root node.
+  // Initialize an empty result array to store the autocompleted words
+  // Loop over each character of the input prefix
+  // Check if the character exists in current.children. If it doesn’t,
+  // return the empty result array because no words match the prefix
+  // If char doesn't exist, return an empty array
+  // Move current to the child node corresponding to char
+  // After processing the prefix, call getwords() to collect all words starting from the current node.
+  // Return the list of words in result.
 
   // Longest Common Prefix
   // Given an array of strings, find the longest common prefix among them
@@ -123,40 +154,44 @@ class Trie {
   // Input: "abab" → Output: 7 (distinct substrings: "a", "b", "ab", "ba", "aba", "bab", "abab")
 
   delete(word) {
-    let current = this.root;
-    let path = [];
-    for (let char of word) {
-      if (!(char in current.children)) {
-        return;
+    const deleteHelper = (node, word, index) => {
+      if (index === word.length) {
+        if (!node.isEndOfWord) return false; // word doesn't exist
+        node.isEndOfWord = false;
+        return Object.keys(node.children).length === 0;
       }
-      path.push({ node: current, char });
-      current = current.children[char];
-    }
 
-    // Step 2: Check if word exists
-    if (!current.isEndOfWord) {
-      return; // Word not fully present
-    }
+      const char = word[index];
+      const child = node.children[char];
+      if (!child) return false;
 
-    // Unmark the end of the word
-    current.isEndOfWord = false;
+      const shouldDeleteChild = deleteHelper(child, word, index + 1);
 
-    // Step 3: Clean up unnecessary nodes (backtrack)
-    for (let i = path.length - 1; i >= 0; i--) {
-      let { node, char } = path[i];
-      let child = node.children[char];
-
-      // Check if child has no children
-      let hasNoChildren = Object.keys(child.children).length === 0;
-
-      // If child has no children and is not end of another word, remove it
-      if (hasNoChildren && !child.isEndOfWord) {
+      if (shouldDeleteChild) {
         delete node.children[char];
-      } else {
-        break; // Stop cleanup if node is part of another word
+        return !node.isEndOfWord && Object.keys(node.children).length === 0;
       }
-    }
+
+      return false;
+    };
+
+    deleteHelper(this.root, word, 0);
   }
+  // Step 1: delete(word) is called — starts from trie root.
+// Step 2: deleteHelper is recursive — goes down one char at a time.
+// Step 3: If index === word.length:
+//   - If not end of word, return false (word not found).
+//   - Else, unmark end and check if node has children.
+// Step 4: If node has no children, return true (can delete).
+// Step 5: Else, get current char’s child.
+//   - If child doesn't exist, return false.
+// Step 6: Recurse on child and next char.
+// Step 7: If child can be deleted, remove it.
+// Step 8: After deleting child, return true if:
+//   - Current node is not end of another word, AND
+//   - Has no children.
+// Step 9: If child can't be deleted, return false.
+// Step 10: Recursion bubbles up, cleaning only unused nodes.
 }
 
 const longestCommonPrefix = function (strs) {

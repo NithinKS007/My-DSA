@@ -1,3 +1,8 @@
+//Finding one or more base cases
+//Callign the same function on the left subtree
+//Calling the same fucntion on the right subtree
+//Joing the results
+
 class Node {
   constructor(value) {
     this.value = value;
@@ -10,9 +15,11 @@ class BinarySearchTree {
   constructor() {
     this.root = null;
   }
+
   isEmpty() {
     return this.root === null;
   }
+
   insert(value) {
     const newNode = new Node(value);
 
@@ -126,6 +133,25 @@ class BinarySearchTree {
     }
   }
 
+  findMaxWithOutRecursion() {
+    let current = this.root;
+
+    while (current !== null && current.right !== null) {
+      current = current.right;
+    }
+
+    return current.value;
+  }
+  findMinWithOutRecursion() {
+    let current = this.root;
+
+    while (current !== null && current.left !== null) {
+      current = current.left;
+    }
+
+    return current.value;
+  }
+
   delete(value) {
     this.root = this.deleteNode(this.root, value);
   }
@@ -163,6 +189,7 @@ class BinarySearchTree {
 
     return root;
   }
+
   isValidBst(root = this.root, minValue = -Infinity, maxValue = Infinity) {
     if (root === null) {
       return true;
@@ -214,10 +241,32 @@ class BinarySearchTree {
     let closest = root.value;
 
     function updateClosest(node) {
+      // depending on whether the target is smaller or larger than the current node's value,
+      // the function moves either left or right in the tree:
+
       if (Math.abs(node.value - target) < Math.abs(closest - target)) {
         closest = node.value;
       }
     }
+    // Initial:
+    //        10
+    //       /  \
+    //      5    15
+    //     / \   / \
+    //    2   8 12  20
+
+    // Target = 13
+
+    // Step 1: Start at 10
+    //    - target (13) > 10 → move right to 15
+
+    // Step 2: Now at 15
+    //    - target (13) < 15 → move left to 12
+
+    // Step 3: Now at 12
+    //    - target (13) > 12 → move right, but it's null (end)
+
+    // Closest value = 12
 
     while (root) {
       updateClosest(root);
@@ -231,6 +280,25 @@ class BinarySearchTree {
     return closest;
   }
 
+  heightIterative() {
+    const queue = [{ node: this.root, depth: 0 }];
+
+    let max = -1;
+    while (queue.length > 0) {
+      const { node, depth } = queue.shift();
+
+      max = Math.max(max, depth);
+
+      if (node.left) {
+        queue.push({ node: node.left, depth: depth + 1 });
+      }
+      if (node.right) {
+        queue.push({ node: node.right, depth: depth + 1 });
+      }
+    }
+
+    return max;
+  }
   //recursive Approach = maximum depth or height
   height(node = this.root) {
     if (node === null) {
@@ -245,31 +313,6 @@ class BinarySearchTree {
 
   // Depth is the number of edges from the root to the node.
   // Height is the number of edges from a node to its deepest leaf.
-
-  //iterative Approach = maximum depth or height
-  height(node = this.root) {
-    if (node === null) {
-      return -1; // Base case: empty tree
-    }
-    const stack = [{ node: node, depth: 0 }];
-    let maxDepth = -1;
-    while (stack.length > 0) {
-      // Pop the current node and its depth from the stack
-      const { node, depth } = stack.pop();
-
-      if (node !== null) {
-        // Update the max depth
-        maxDepth = Math.max(maxDepth, depth);
-        if (node.right) {
-          stack.push({ node: node.right, depth: depth + 1 });
-        }
-        if (node.left) {
-          stack.push({ node: node.left, depth: depth + 1 });
-        }
-      }
-    }
-    return maxDepth;
-  }
 
   isbothTreeIdentical(p, q) {
     if (!p && !q) return true;
@@ -286,14 +329,14 @@ class BinarySearchTree {
       if (node1.left && node2.left) {
         queue1.push(node1.left);
         queue2.push(node2.left);
-      } else if (node1.left || node2.left) {
-        return false;
+      } else if (!node1.left || !node2.left) {
+        return false; // One tree has a left child but the other doesn't
       }
 
       if (node1.right && node2.right) {
         queue1.push(node1.right);
         queue2.push(node2.right);
-      } else if (node1.right || node2.right) {
+      } else if (!node1.right || !node2.right) {
         return false;
       }
     }
@@ -435,25 +478,6 @@ class BinarySearchTree {
     return leafCount;
   }
 
-  findMaxWithOutRecursion() {
-    let current = this.root;
-
-    while (current !== null && current.right !== null) {
-      current = current.right;
-    }
-
-    return current.value;
-  }
-  findMinWithOutRecursion() {
-    let current = this.root;
-
-    while (current !== null && current.left !== null) {
-      current = current.left;
-    }
-
-    return current.value;
-  }
-
   hasPathSum(node, targetSum) {
     // Base case: if the node is null, there's no path
     if (node === null) {
@@ -523,6 +547,7 @@ class BinarySearchTree {
       return 1 + leftCount + rightCount;
     }
   }
+  
   insertIteration(value) {
     if (!this.root) {
       this.root = new Node(value);
@@ -569,7 +594,31 @@ class BinarySearchTree {
       countSingleChildNodes(root.right)
     );
   }
-  
+
+  countSingleChildNodesIterative() {
+    const queue = [this.root];
+    let count = 0;
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+
+      if (
+        (!currentNode.right && currentNode.left) ||
+        (currentNode.right && !currentNode.left)
+      ) {
+        count++;
+      }
+      if (currentNode.left) {
+        queue.push(currentNode.left);
+      }
+
+      if (currentNode.right) {
+        queue.push(currentNode.right);
+      }
+    }
+    return count;
+  }
+
   // root: The root of the binary tree (or subtree).
 
   // p: The first node for which we need to find the LCA.
@@ -659,17 +708,6 @@ class BinarySearchTree {
     }
 
     return false; // If no pair found that sums to k
-
-    //USING FOR LOOP
-    for (let i = 0; i < sorted.length; i++) {
-      for (let j = i + 1; j < sorted.length; j++) {
-        if (sorted[i] + sorted[j] === k) {
-          return true; // Found two numbers that sum to k
-        }
-      }
-    }
-
-    return false; // No such pair found
   }
   // Method to check if two nodes in the BST sum up to the target value k
   twoSumUsingSet(k) {
@@ -720,23 +758,230 @@ class BinarySearchTree {
     return this.diameter; // Return the diameter after the DFS
   }
 
-  serialize() {
-    const result = [];
+  // The goal of the problem is to take a sorted array and convert it
+  // into a height-balanced Binary Search Tree.
 
-    const serializeNode = (node) => {
-      if (!node) {
-        result.push("null");
-        return;
-      }
-      result.push(node.value);
-      serializeNode(node.left);
-      serializeNode(node.right);
+  // In-order Traversal of a BST: If you perform an in-order traversal (left → root → right) of a BST,
+  // you get the elements in sorted order.
+
+  // Balanced BST: To get a balanced BST, you want to ensure that the root of the tree divides the
+  // array into two halves (left and right subtrees), each of which is also a BST.
+  // The best way to achieve this is to make the middle element of the sorted array the root of the BST.
+
+  // 1. Use the Middle Element:
+
+  //  The middle element of the sorted array should be chosen as the root because it ensures the tree remains balanced.
+  //  This is because the middle element divides the array into two equal halves, and this division naturally provides
+  //  balance to the tree.
+
+  // Recursively Apply the Same Logic:
+
+  // Once the middle element is chosen as the root, you recursively apply the same logic to the two subarrays
+  // (left and right of the middle element) to build the left and right subtrees, respectively.
+
+  // Termination Condition:
+
+  // The base case for the recursion is when the array has zero or one element, at which point the tree node is
+  // either None (if the array is empty) or the node itself (if the array has one element).
+
+  //  Step-by-Step Breakdown of the Process
+
+  // Find the middle element of the sorted array. This element will be the root of the tree (or subtree).
+
+  // Recursively build the left subtree:
+
+  // Take the left half of the array (elements before the middle) and recursively construct the left subtree.
+
+  // Recursively build the right subtree:
+
+  // Take the right half of the array (elements after the middle) and recursively construct the right subtree.
+
+  // Repeat until all subarrays are processed:
+
+  // Each recursive call processes smaller and smaller subarrays until all elements from the array are placed into the tree.
+
+  // [1, 2, 3, 4, 5, 6, 7]
+
+  //     4
+  //    / \
+  //   2   6
+  //  / \ / \
+  // 1  3 5  7
+
+  sortedArrayToBst = () => {
+    const sortedArray = this.inOrder();
+
+    if (!sortedArray || sortedArray.length === 0) return null;
+
+    const buildBst = (start, end) => {
+      if (start > end) return null;
+
+      const middle = Math.floor((start + end) / 2);
+
+      const root = new Node(sortedArray[middle]);
+
+      root.left = buildBst(start, middle - 1);
+      root.right = buildBst(middle + 1, end);
+
+      return root;
     };
 
-    serializeNode(this.root);
-    return result.join(",");
+    this.root = buildBst(0, sortedArray.length - 1);
+  };
+
+  //sum of left leaves nodes
+
+  sumLeftLeaves() {
+    let sum = 0;
+
+    if (!root) return sum;
+    const queue = [this.root];
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      if (node.left && !node.left.left && !node.left.right) {
+        sum += node.left.value;
+      }
+
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+
+    return sum;
   }
-  //deserialize(){}
+
+  //find the max occuring values in a bst
+
+  findMode() {
+    const queue = [this.root];
+    const result = [];
+    let maxCount = 0;
+    const count = {};
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      if (count[node.value]) {
+        count[node.value]++;
+      } else {
+        count[node.value] = 1;
+      }
+
+      if (count[node.value] > maxCount) {
+        maxCount = count[node.value];
+      }
+
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+
+    for (let val in count) {
+      if (count[val] === maxCount) {
+        result.push(Number(val));
+      }
+    }
+
+    return result.length > 0 ? result : [0];
+  }
+
+  //check if leaf-similar in if we give two tree roots
+
+  // use dfs inorder because:
+
+  // You start at the top of the tree (the root).
+  // First, you look at the left branch of the tree and go all the way down to the
+  // leftmost leaf (the furthest left child).
+
+  // Once you've reached the leftmost leaf, you pick it up (the leaf node) and put it
+  // in your "collection."
+
+  // Then, you go back to the parent node and look at the right branch of that node.
+
+  // You repeat the process: go left first, pick up the leaf, then go right.
+  similarLeafNode(roo1, root2) {
+    const leaves1 = [];
+    const leaves2 = [];
+
+    const inorder = (node, result) => {
+      if (node) {
+        inorder(node.left, result);
+        if (!node.left && !node.right) {
+          result.push(node.value);
+        }
+        inorder(node.right, result);
+      }
+    };
+
+    inorder(roo1, leaves1);
+    inorder(root2, leaves2);
+
+    if (leaves1.length !== leaves2.length) return false;
+
+    for (let i = 0; i < leaves1.length; i++) {
+      if (leaves1[i] !== leaves2[i]) return false;
+    }
+
+    return true;
+  }
+
+  isHeightBalanced(root = this.root) {
+    const dfs = (node) => {
+      if (node === null) return 0;
+
+      const leftHeight = dfs(node.left);
+
+      if (leftHeight === -1) return -1;
+
+      const rightHeight = dfs(node.right);
+
+      if (rightHeight === -1) return -1;
+
+      if (Math.abs(leftHeight - rightHeight) > 1) {
+        return -1;
+      }
+
+      return Math.max(leftHeight, rightHeight) + 1;
+    };
+    return dfs(root) !== -1;
+  }
+
+  // Define the tree node
+
+
+// Helper to calculate depth of leftmost path
+ findDepth(node) {
+  let depth = 0;
+  while (node) {
+    depth++;
+    node = node.left;
+  }
+  return depth;
+}
+
+// Main function to check if tree is perfect
+ isPerfect(root) {
+  const depth = findDepth(root);
+
+  function check(node, level = 1) {
+    if (!node) return true;
+
+    // If it's a leaf
+    if (!node.left && !node.right) {
+      return level === depth;
+    }
+
+    // If it's an internal node, must have both children
+    if (!node.left || !node.right) return false;
+
+    // Recurse on both subtrees
+    return check(node.left, level + 1) && check(node.right, level + 1);
+  }
+
+  return check(root);
+}
+
+
   //construct a bst from inorder ,preorder,postorder traversel
   //zigzag level order traversal
   //flatten a binary tree to a linked list
