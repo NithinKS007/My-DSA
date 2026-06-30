@@ -1,63 +1,56 @@
 #include <stdio.h>
-#include <conio.h>
 #include <stdlib.h>
 /* Definition of the structure node */
-typedef struct node
+typedef struct Node
 {
     int data;
-    struct node *next;
-} node;
+    struct Node *next;
+} Node;
 
-void push(node **tos, int item)
+void push(Node **top, int item)
 {
-    node *temp;
-    temp = (node *)malloc(sizeof(node));
+    Node *temp = malloc(sizeof(Node));
     if (temp == NULL)
     {
         printf("\nError: Insufficient Memory Space");
-        getch();
         return;
     }
-    else
-    {
-        temp->data = item;
 
-        temp->next = *tos;
-        *tos = temp;
-    }
+    temp->data = item;
+    temp->next = *top;
+    *top = temp;
+    printf("\n%d pushed successfully.\n", item);
 }
 
-int pop(node **tos)
+int pop(Node **top)
 {
-    node *temp;
-    temp = *tos;
+    Node *temp;
+    temp = *top;
     int item;
-    if (*tos == NULL)
-        return (NULL);
-    else
+    if (*top == NULL)
     {
-        *tos = (*tos)->next;
-        item = temp->data;
-        free(temp);
-        return (item);
+        return -1;
     }
+
+    *top = (*top)->next;
+    item = temp->data;
+    free(temp);
+    return (item);
 }
 
-void display(node *tos)
+void display(Node *top)
 {
-    node *temp = tos;
+    Node *temp = top;
     if (temp == NULL)
     {
         printf("\nStack is empty");
         return;
     }
-    else
+
+    while (temp != NULL)
     {
-        while (temp != NULL)
-        {
-            printf("\n%d", temp->data);
-            temp = temp->next;
-        }
+        printf("\n%d", temp->data);
+        temp = temp->next;
     }
 }
 
@@ -65,11 +58,10 @@ int main()
 {
     int item, ch;
     char choice = 'y';
-    node *p = NULL;
+    Node *top = NULL;
 
     while (choice == 'y')
     {
-        clrscr();
 
         printf("\t\t\t\t*****MENU*****");
         printf("\n\t\t\t1. To PUSH an element");
@@ -85,11 +77,11 @@ int main()
         case 1:
             printf("\nEnter an element to push: ");
             scanf("%d", &item);
-            push(&p, item);
+            push(&top, item);
             break;
 
         case 2:
-            item = pop(&p);
+            item = pop(&top);
 
             if (item != NULL)
                 printf("\nDeleted item is %d", item);
@@ -98,7 +90,7 @@ int main()
 
         case 3:
             printf("\nThe elements of stack are:\n");
-            display(p);
+            display(top);
             break;
 
         case 4:

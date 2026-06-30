@@ -9,24 +9,24 @@ struct Stack
     int array[MAX];
     int top;
 };
+struct Stack st;
 
-void menu(struct Stack *s);
-void push(struct Stack *s);
-void pop(struct Stack *s);
-void show_elements(struct Stack *s);
+void menu(struct Stack *st);
+void push(struct Stack *st);
+void pop(struct Stack *st);
+void show_elements(struct Stack *st);
 
 int main()
 {
-    struct Stack s;
 
-    s.top = 0;
+    st.top = 0;
 
-    menu(&s);
+    menu(&st);
 
     return 0;
 }
 
-void menu(struct Stack *s)
+void menu(struct Stack *st)
 {
     int choice;
 
@@ -43,15 +43,15 @@ void menu(struct Stack *s)
         switch (choice)
         {
         case 1:
-            push(s);
+            push(st);
             break;
 
         case 2:
-            pop(s);
+            pop(st);
             break;
 
         case 3:
-            show_elements(s);
+            show_elements(st);
             break;
 
         case 4:
@@ -63,11 +63,11 @@ void menu(struct Stack *s)
         }
     }
 }
-void push(struct Stack *s)
+void push(struct Stack *st)
 {
     int element;
 
-    if (s->top == MAX)
+    if (st->top >= MAX)
     {
         printf("Stack Overflow!\n");
         return;
@@ -76,26 +76,26 @@ void push(struct Stack *s)
     printf("Enter element: ");
     scanf("%d", &element);
 
-    s->array[s->top] = element;
-    s->top++;
+    st->array[st->top] = element;
+    st->top++;
 }
 
-void pop(struct Stack *s)
+void pop(struct Stack *st)
 {
-    if (s->top == 0)
+    if (st->top == 0)
     {
         printf("Stack Underflow!\n");
         return;
     }
 
-    s->top--;
+    st->top--;
 
-    printf("Popped Element: %d\n", s->array[s->top]);
+    printf("Popped Element: %d\n", st->array[st->top]);
 }
 
-void show_elements(struct Stack *s)
+void show_elements(struct Stack *st)
 {
-    if (s->top == 0)
+    if (st->top == 0)
     {
         printf("Stack is Empty!\n");
         return;
@@ -103,8 +103,8 @@ void show_elements(struct Stack *s)
 
     printf("\nStack Elements:\n");
 
-    for (int i = s->top - 1; i >= 0; i--)
+    for (int i = st->top - 1; i >= 0; i--)
     {
-        printf("%d\n", s->array[i]);
+        printf("%d\n", st->array[i]);
     }
 }
