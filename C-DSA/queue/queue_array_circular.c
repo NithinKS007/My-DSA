@@ -2,73 +2,98 @@
 
 #define MAX 10
 
-void enqueue(int value);
-void dequeue(void);
+void add(int);
+void deleteelement(void);
 
 int queue[MAX];
-int front = 0;
-int rear = -1;
-int count = 0;
+int front = -1, rear = -1;
 
-int main(void)
+int main()
 {
-    int choice, value;
+    int choice, x;
 
     while (1)
     {
-        printf("\n1. Enqueue");
-        printf("\n2. Dequeue");
-        printf("\n3. Exit");
-        printf("\nEnter your choice: ");
+        printf("\n1. Add Element\n");
+        printf("2. Delete Element\n");
+        printf("3. Exit\n");
+        printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice)
         {
         case 1:
             printf("Enter the element to be added: ");
-            scanf("%d", &value);
-            enqueue(value);
+            scanf("%d", &x);
+            add(x);
             break;
 
         case 2:
-            dequeue();
+            deleteelement();
             break;
 
         case 3:
             return 0;
 
         default:
-            printf("Invalid Choice\n");
+            printf("Invalid choice!\n");
         }
     }
 }
 
-void enqueue(int value)
+void add(int y)
 {
-    if (count == MAX)
+    /* Queue Full */
+    if ((front == 0 && rear == MAX - 1) ||
+        (front == rear + 1))
     {
         printf("Queue Overflow\n");
         return;
     }
 
-    rear = (rear + 1) % MAX;
-    queue[rear] = value;
-    count++;
+    /* First Element */
+    if (front == -1)
+    {
+        front = rear = 0;
+    }
+    else if (rear == MAX - 1)
+    {
+        rear = 0;
+    }
+    else
+    {
+        rear++;
+    }
+
+    queue[rear] = y;
+    printf("%d inserted successfully.\n", y);
 }
 
-void dequeue(void)
+void deleteelement()
 {
-    int deletedElement;
+    int deleted_front;
 
-    if (count == 0)
+    /* Queue Empty */
+    if (front == -1)
     {
-        printf("Queue Underflow\n");
+        printf("Queue Underflow (Queue Empty)\n");
         return;
     }
 
-    deletedElement = queue[front];
-    printf("Deleted element: %d\n", deletedElement);
+    deleted_front = queue[front];
+    printf("Deleted element: %d\n", deleted_front);
 
-    front = (front + 1) % MAX;
-    count--;
+    /* Last Element */
+    if (front == rear)
+    {
+        front = rear = -1;
+    }
+    else if (front == MAX - 1)
+    {
+        front = 0;
+    }
+    else
+    {
+        front++;
+    }
 }
