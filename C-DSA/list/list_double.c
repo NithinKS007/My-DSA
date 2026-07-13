@@ -4,8 +4,8 @@
 struct dl_list
 {
     int data;
-    struct dl_list *left;
-    struct dl_list *right;
+    struct dl_list *prev;
+    struct dl_list *next;
 };
 
 typedef struct dl_list dlist;
@@ -39,16 +39,18 @@ dlist *dl_create()
     scanf("%d", &value);
 
     if (value == -1111)
+    {
         return NULL;
+    }
 
     dlist *node = (dlist *)malloc(sizeof(dlist));
 
     node->data = value;
-    node->left = NULL;
-    node->right = dl_create();
+    node->prev = NULL;
+    node->next = dl_create();
 
-    if (node->right != NULL)
-        node->right->left = node;
+    if (node->next != NULL)
+        node->next->prev = node;
 
     return node;
 }
@@ -57,7 +59,9 @@ dlist *dl_create()
 void traverse_forward(dlist *start)
 {
     if (start == NULL)
+    {
         return;
+    }
 
     dlist *temp = start;
 
@@ -65,10 +69,12 @@ void traverse_forward(dlist *start)
     {
         printf("%d ", temp->data);
 
-        if (temp->right == NULL)
+        if (temp->next == NULL)
+        {
             break;
+        }
 
-        temp = temp->right;
+        temp = temp->next;
     }
 }
 
@@ -81,13 +87,13 @@ void traverse_backward(dlist *start)
     dlist *temp = start;
 
     /* Move to the last node */
-    while (temp->right != NULL)
-        temp = temp->right;
+    while (temp->next != NULL)
+        temp = temp->next;
 
     /* Traverse backwards */
     while (temp != NULL)
     {
         printf("%d ", temp->data);
-        temp = temp->left;
+        temp = temp->prev;
     }
 }
